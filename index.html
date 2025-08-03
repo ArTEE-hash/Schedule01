@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กำหนดการประชุมเตรียมความพร้อม</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .update-date {
+            background: #f8f9fa;
+            padding: 15px 30px;
+            text-align: right;
+            font-size: 14px;
+            color: #6c757d;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .event-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .event-info h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .event-info .details {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .schedule-date {
+            background: #2d3748;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .time-slot {
+            display: flex;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .time-slot:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .time-slot.highlight {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 50%, #0984e3 100%);
+            color: white;
+            border: 2px solid #00b894;
+            box-shadow: 0 8px 25px rgba(0, 184, 148, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 8px 25px rgba(0, 184, 148, 0.3);
+            }
+            100% {
+                box-shadow: 0 12px 35px rgba(0, 184, 148, 0.5);
+            }
+        }
+
+        .time {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            min-width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .time-slot.highlight .time {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .activity {
+            flex: 1;
+            padding: 15px 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .activity strong {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .time-slot.highlight .activity strong {
+            color: white;
+        }
+
+        .notes {
+            background: #e8f4fd;
+            border-left: 4px solid #4a90e2;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .notes h3 {
+            color: #2d3748;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .notes ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .notes li {
+            padding: 5px 0;
+            font-size: 14px;
+            color: #4a5568;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .notes li::before {
+            content: '•';
+            color: #4a90e2;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .online-meeting-compact {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .online-meeting-compact h4 {
+            color: #495057;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .meeting-info {
+            line-height: 1.4;
+        }
+
+        .meeting-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .meeting-text {
+            flex: 1;
+        }
+
+        .meeting-link-row {
+            margin-bottom: 8px;
+        }
+
+        .meeting-link-row a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .meeting-link-row a:hover {
+            text-decoration: underline;
+        }
+
+        .meeting-details-compact {
+            color: #6c757d;
+            font-size: 12px;
+        }
+
+        .meeting-details-compact .code {
+            background: #e9ecef;
+            color: #495057;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+        }
+
+        .qr-code {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .qr-placeholder {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 4px;
+            background: white;
+            margin-bottom: 4px;
+        }
+
+        .qr-label {
+            font-size: 10px;
+            color: #6c757d;
+            text-align: center;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .time-slot:hover {
+                transform: none;
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .time-slot {
+                flex-direction: column;
+            }
+            
+            .time {
+                min-width: auto;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+
+            .meeting-content {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .qr-code {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/%E0%B8%95%E0%B8%A3%E0%B8%B2%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%97%E0%B8%A3%E0%B8%A7%E0%B8%87%E0%B8%AA%E0%B8%B2%E0%B8%98%E0%B8%B2%E0%B8%A3%E0%B8%93%E0%B8%AA%E0%B8%B8%E0%B8%82%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88.png" alt="กระทรวงสาธารณสุข">
+            </div>
+            <h1>กำหนดการประชุมเตรียมความพร้อม</h1>
+            <div class="subtitle">ข้อมูล External Force เพื่อประกอบการจัดทำแผนยุทธศาสตร์ระดับสุขภาพระยะ 5 ปี</div>
+        </div>
+        
+        <div class="update-date">
+            Update 24 มิถุนายน 2568
+        </div>
+
+        <div class="content">
+            <div class="event-info">
+                <h2>วันที่ 1 สิงหาคม 2568</h2>
+                <div class="details">
+                    เวลา 09.00 - 16.30 น.<br>
+                    ณ ห้องประชุมปากน้ำ<br>
+                    สำนักงานสาธารณสุขจังหวัดสมุทรปราการ
+                </div>
+            </div>
+
+            <div class="schedule-date">
+                📅 วันที่ 1 สิงหาคม 2568
+            </div>
+
+            <div class="time-slot">
+                <div class="time">08:00 - 08:30 น.</div>
+                <div class="activity">
+                    <strong>ลงทะเบียนเข้าร่วมการประชุม</strong>
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time">08:30 - 09:00 น.</div>
+                <div class="activity">
+                    <strong>พิธีเปิดการประชุมและมอบนโยบายการจัดทำแผนยุทธศาสตร์ ระดับจังหวัด</strong><br>
+                    โดย นายแพทย์ประภาส ผูกดวง นายแพทย์สาธารณสุขจังหวัดสมุทรปราการ
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time">09:00 - 10:00 น.</div>
+                <div class="activity">
+                    <strong>นำเสนอ</strong><br>
+                    - ข้อมูลพื้นฐาน สภาวะสุขภาพ ของจังหวัดสมุทรปราการ<br>
+                    - ผลการดำเนินงานตามตัวชี้วัด ของจังหวัดสมุทรปราการ<br>
+                    โดย นายแพทย์วี โรจน์ศิระประภา นายแพทย์เชี่ยวชาญ (ด้านเวชกรรมป้องกัน)<br>
+                    รองนายแพทย์สาธารณสุขจังหวัดสมุทรปราการ
+                </div>
+            </div>
+
+            <div class="time-slot highlight">
+                <div class="time">10:00 - 12:00 น.</div>
+                <div class="activity">
+                    <strong>นำเสนอ ข้อมูลพื้นฐาน สภาวะสุขภาพ และ External force ระดับอำเภอ</strong><br>
+                    โดย คปสอ. 6 อำเภอ (อำเภอละไม่เกิน 15 นาที)
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time">12:00 - 13:00 น.</div>
+                <div class="activity">
+                    <strong>พักรับประทานอาหารกลางวัน</strong>
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time">13:00 - 14:30 น.</div>
+                <div class="activity">
+                    <strong>แบ่งกลุ่ม 6 คปสอ.</strong><br>
+                    - วิเคราะห์ข้อมูลจุดเน้น (common goal) และ (end way mean) ระดับจังหวัด
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time">14:30 - 16:00 น.</div>
+                <div class="activity">
+                    <strong>นำเสนอ ผลการวิเคราะห์ข้อมูล จุดเน้น common goal และ end way mean ระดับจังหวัด</strong><br>
+                    โดย คปสอ. 6 อำเภอ (อำเภอละไม่เกิน 15 นาที)
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time">16:00 - 16:30 น.</div>
+                <div class="activity">
+                    <strong>อภิปรายปัญหาทั่วไปและตอบข้อซักถาม</strong>
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time">16:30</div>
+                <div class="activity">
+                    <strong>พิธีปิดการประชุม</strong>
+                </div>
+            </div>
+
+            <div class="notes">
+                <h3>📋 หมายเหตุ:</h3>
+                <ul>
+                    <li>พักรับประทานอาหารว่าง เวลา 10:30 - 10:45 น. และ 14:30 - 14:45 น.</li>
+                    <li>รายละเอียดกิจกรรมสามารถเปลี่ยนแปลงได้ตามสถานการณ์และความเหมาะสม</li>
+                    <li>การแต่งกาย: ชุดฟอร์มฟ้ากระทรวงสาธารณสุข เสื้อเหลือง ชุดสุภาพ</li>
+                </ul>
+            </div>
+
+            <div class="online-meeting-compact">
+                <h4>🖥️ ประชุมออนไลน์</h4>
+                <div class="meeting-info">
+                    <div class="meeting-content">
+                        <div class="meeting-text">
+                            <div class="meeting-link-row">
+                                <strong>ลิงค์:</strong> 
+                                <a href="https://spkossj1.webex.com/spkossj1/j.php?MTID=m26683b716cd1c0a66edf7756c4525722" target="_blank">
+                                    เข้าร่วมประชุม WebEx
+                                </a>
+                            </div>
+                            <div class="meeting-details-compact">
+                                Meeting ID: <span class="code">2510 283 6358</span> | 
+                                Password: <span class="code">2iNtr9pTzn7</span> | 
+                                Tel: <span class="code">+65-6703-6949</span>
+                            </div>
+                        </div>
+                        <div class="qr-code">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="QR Code" style="display: none;">
+                            <div class="qr-placeholder">
+                                <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- QR Code Pattern -->
+                                    <rect width="100" height="100" fill="white"/>
+                                    
+                                    <!-- Corner squares -->
+                                    <rect x="0" y="0" width="28" height="28" fill="black"/>
+                                    <rect x="4" y="4" width="20" height="20" fill="white"/>
+                                    <rect x="8" y="8" width="12" height="12" fill="black"/>
+                                    
+                                    <rect x="72" y="0" width="28" height="28" fill="black"/>
+                                    <rect x="76" y="4" width="20" height="20" fill="white"/>
+                                    <rect x="80" y="8" width="12" height="12" fill="black"/>
+                                    
+                                    <rect x="0" y="72" width="28" height="28" fill="black"/>
+                                    <rect x="4" y="76" width="20" height="20" fill="white"/>
+                                    <rect x="8" y="80" width="12" height="12" fill="black"/>
+                                    
+                                    <!-- Data pattern (simplified) -->
+                                    <rect x="32" y="8" width="4" height="4" fill="black"/>
+                                    <rect x="40" y="8" width="4" height="4" fill="black"/>
+                                    <rect x="48" y="8" width="4" height="4" fill="black"/>
+                                    <rect x="56" y="8" width="4" height="4" fill="black"/>
+                                    <rect x="64" y="8" width="4" height="4" fill="black"/>
+                                    
+                                    <rect x="8" y="32" width="4" height="4" fill="black"/>
+                                    <rect x="16" y="32" width="4" height="4" fill="black"/>
+                                    <rect x="32" y="32" width="4" height="4" fill="black"/>
+                                    <rect x="48" y="32" width="4" height="4" fill="black"/>
+                                    <rect x="64" y="32" width="4" height="4" fill="black"/>
+                                    <rect x="80" y="32" width="4" height="4" fill="black"/>
+                                    <rect x="88" y="32" width="4" height="4" fill="black"/>
+                                    <rect x="96" y="32" width="4" height="4" fill="black"/>
+                                    
+                                    <rect x="32" y="40" width="4" height="4" fill="black"/>
+                                    <rect x="48" y="40" width="4" height="4" fill="black"/>
+                                    <rect x="56" y="40" width="4" height="4" fill="black"/>
+                                    <rect x="72" y="40" width="4" height="4" fill="black"/>
+                                    <rect x="88" y="40" width="4" height="4" fill="black"/>
+                                    
+                                    <rect x="40" y="48" width="4" height="4" fill="black"/>
+                                    <rect x="56" y="48" width="4" height="4" fill="black"/>
+                                    <rect x="64" y="48" width="4" height="4" fill="black"/>
+                                    <rect x="80" y="48" width="4" height="4" fill="black"/>
+                                    <rect x="96" y="48" width="4" height="4" fill="black"/>
+                                    
+                                    <rect x="32" y="56" width="4" height="4" fill="black"/>
+                                    <rect x="48" y="56" width="4" height="4" fill="black"/>
+                                    <rect x="72" y="56" width="4" height="4" fill="black"/>
+                                    <rect x="88" y="56" width="4" height="4" fill="black"/>
+                                    
+                                    <rect x="8" y="64" width="4" height="4" fill="black"/>
+                                    <rect x="24" y="64" width="4" height="4" fill="black"/>
+                                    <rect x="40" y="64" width="4" height="4" fill="black"/>
+                                    <rect x="56" y="64" width="4" height="4" fill="black"/>
+                                    <rect x="72" y="64" width="4" height="4" fill="black"/>
+                                    <rect x="96" y="64" width="4" height="4" fill="black"/>
+                                    
+                                    <rect x="32" y="88" width="4" height="4" fill="black"/>
+                                    <rect x="48" y="88" width="4" height="4" fill="black"/>
+                                    <rect x="56" y="88" width="4" height="4" fill="black"/>
+                                    <rect x="72" y="88" width="4" height="4" fill="black"/>
+                                    <rect x="88" y="88" width="4" height="4" fill="black"/>
+                                    <rect x="96" y="88" width="4" height="4" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="qr-label">สแกนเพื่อเข้าร่วม</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add print functionality
+        function printSchedule() {
+            window.print();
+        }
+
+        // Add keyboard shortcut for printing
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                printSchedule();
+            }
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                this.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
